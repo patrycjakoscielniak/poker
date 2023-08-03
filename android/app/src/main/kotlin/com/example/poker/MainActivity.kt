@@ -1,4 +1,4 @@
-package com.example.poker
+package com.patrycjakoscielniak.poker
 
 import io.flutter.embedding.android.FlutterActivity
 
