@@ -16,7 +16,7 @@ class MyApp extends StatelessWidget {
         useMaterial3: true,
       ),
       home: Scaffold(
-        backgroundColor: Color.fromARGB(255, 49, 102, 51),
+        backgroundColor: const Color.fromARGB(255, 49, 102, 51),
         body: Center(
             child: ElevatedButton(
                 onPressed: () {},
