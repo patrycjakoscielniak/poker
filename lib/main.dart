@@ -15,9 +15,15 @@ class MyApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
       ),
-      home: const Scaffold(
+      home: Scaffold(
         backgroundColor: Color.fromARGB(255, 49, 102, 51),
-        body: Center(child: Text('Poker')),
+        body: Center(
+            child: ElevatedButton(
+                onPressed: () {},
+                child: const Text(
+                  'Start Game',
+                  style: TextStyle(color: Colors.black),
+                ))),
       ),
     );
   }
