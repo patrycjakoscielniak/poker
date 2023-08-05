@@ -54,3 +54,12 @@ class Hand {
     required this.card5,
   });
 }
+
+class Player {
+  String name;
+  Hand hand;
+  Player({
+    required this.name,
+    required this.hand,
+  });
+}
