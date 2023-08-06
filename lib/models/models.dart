@@ -37,6 +37,14 @@ class Card {
 class Deck {
   List<Card> allCards;
   Deck({required this.allCards});
+  List<Card> get getCards {
+    for (var suit in CardSuit.values) {
+      for (var type in CardType.values) {
+        allCards.add(Card(cardSuit: suit, cardType: type));
+      }
+    }
+    return allCards;
+  }
 }
 
 class Hand {
@@ -58,8 +66,16 @@ class Hand {
 class Player {
   String name;
   Hand hand;
-  Player({
-    required this.name,
-    required this.hand,
-  });
+  int score;
+  bool showCards;
+  Player(
+      {required this.name,
+      required this.hand,
+      required this.score,
+      required this.showCards});
+}
+
+class DeckAfterDeal {
+  List<Card> cardsAfterDeal;
+  DeckAfterDeal({required this.cardsAfterDeal});
 }
