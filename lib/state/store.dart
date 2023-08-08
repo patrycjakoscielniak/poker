@@ -1,7 +1,9 @@
-import 'dart:math';
-
-import '../constants.dart';
-import '../methods.dart';
+import 'package:poker/state/actions/close_player_mode.dart';
+import 'package:poker/state/actions/deal_cards.dart';
+import 'package:poker/state/actions/exchange_cards.dart';
+import 'package:poker/state/actions/open_player_mode.dart';
+import 'package:poker/state/actions/play_again.dart';
+import 'package:poker/state/actions/show_results.dart';
 import '../models/models.dart';
 
 class AppState {
@@ -49,122 +51,25 @@ enum Action {
 }
 
 AppState reducer(AppState state, action) {
-  AppState newState = state;
-  switch (action) {
-    case Action.dealCards:
-      List<Card> deck = [];
-      Player player1;
-      Player player2;
-      List<Card> hand1 = [];
-      List<Card> hand2 = [];
-      int score1 = 0;
-      int score2 = 0;
-
-      for (var suit in CardSuit.values) {
-        for (var type in CardType.values) {
-          deck.add(Card(cardSuit: suit, cardType: type));
-          deck.shuffle();
-        }
-      }
-
-      int randomNumber = Random().nextInt(deck.length);
-      for (int i = 0; i < 5; i++) {
-        hand1.add(deck[randomNumber]);
-        deck.remove(hand1[i]);
-      }
-      hand1.sort(((a, b) => a.cardType.index.compareTo(b.cardType.index)));
-      if (hand1 == heartsPoker.hand) {
-        deck.remove(spadesPoker.hand.elementAt(randomNumber));
-        deck.remove(diamondsPoker.hand.elementAt(randomNumber));
-        deck.remove(clubsPoker.hand.elementAt(randomNumber));
-      }
-      if (hand1 == spadesPoker.hand) {
-        deck.remove(heartsPoker.hand.elementAt(randomNumber));
-        deck.remove(diamondsPoker.hand.elementAt(randomNumber));
-        deck.remove(clubsPoker.hand.elementAt(randomNumber));
-      }
-      if (hand1 == diamondsPoker.hand) {
-        deck.remove(spadesPoker.hand.elementAt(randomNumber));
-        deck.remove(heartsPoker.hand.elementAt(randomNumber));
-        deck.remove(clubsPoker.hand.elementAt(randomNumber));
-      }
-      if (hand1 == clubsPoker.hand) {
-        deck.remove(spadesPoker.hand.elementAt(randomNumber));
-        deck.remove(diamondsPoker.hand.elementAt(randomNumber));
-        deck.remove(heartsPoker.hand.elementAt(randomNumber));
-      }
-      for (int i = 0; i < 5; i++) {
-        hand2.add(deck[randomNumber]);
-        deck.remove(hand2[i]);
-      }
-      hand2.sort(((a, b) => a.cardType.index.compareTo(b.cardType.index)));
-      score1 = calculateScore(hand1);
-      score2 = calculateScore(hand2);
-
-      player1 = Player(
-          name: 'Player 1',
-          hand: Hand(hand: hand1),
-          score: score1,
-          showCards: false);
-      player2 = Player(
-          name: 'Player 2',
-          hand: Hand(hand: hand2),
-          score: score2,
-          showCards: false);
-      newState = AppState(Deck(allCards: deck), Hand(hand: hand1),
-          Hand(hand: hand2), player1, player2);
-    case Action.openPlayer1Mode:
-      Player player1 = Player(
-          name: 'Player 1',
-          hand: state.hand1,
-          score: calculateScore(state.hand1.hand),
-          showCards: true);
-      newState = AppState(
-          state.deck, state.hand1, state.hand2, player1, state.player2);
-    case Action.openPlayer2Mode:
-      Player player2 = Player(
-          name: 'Player 2',
-          hand: state.hand2,
-          score: calculateScore(state.hand2.hand),
-          showCards: true);
-      newState = AppState(
-          state.deck, state.hand1, state.hand2, state.player1, player2);
-    case Action.closePlayer1Mode:
-      Player player1 = Player(
-          name: 'Player 1',
-          hand: state.hand1,
-          score: calculateScore(state.hand1.hand),
-          showCards: false);
-      newState = AppState(
-          state.deck, state.hand1, state.hand2, player1, state.player2);
-    case Action.closePlayer2Mode:
-      Player player2 = Player(
-          name: 'Player 2',
-          hand: state.hand2,
-          score: calculateScore(state.hand2.hand),
-          showCards: false);
-      newState = AppState(
-          state.deck, state.hand1, state.hand2, state.player1, player2);
-    case Action.exchangeCards:
-      newState = AppState(
-          state.deck, state.hand1, state.hand2, state.player1, state.player2);
-    case Action.showResults:
-      Player player1 = Player(
-          name: 'Player 1',
-          hand: state.hand1,
-          score: calculateScore(state.hand1.hand),
-          showCards: true);
-
-      Player player2 = Player(
-        name: 'Player 2',
-        hand: state.hand2,
-        score: calculateScore(state.hand2.hand),
-        showCards: true,
-      );
-      newState =
-          AppState(state.deck, state.hand1, state.hand2, player1, player2);
-    case Action.playAgain:
-      newState = AppState.initialState();
+  if (action is DealCards || action is ExchangeCards) {
+    return AppState(action.deck, action.hand1, action.hand2, action.player1,
+        action.player2);
   }
-  return newState;
+  if (action is OpenPlayer1Mode || action is ClosePlayer1Mode) {
+    return AppState(
+        state.deck, state.hand1, state.hand2, action.player1, state.player2);
+  }
+  if (action is OpenPlayer2Mode || action is ClosePlayer2Mode) {
+    return AppState(
+        state.deck, state.hand1, state.hand2, state.player1, action.player2);
+  }
+  if (action is ShowResults) {
+    return AppState(
+        state.deck, state.hand1, state.hand2, action.player1, action.player2);
+  }
+  if (action is PlayAgain) {
+    return AppState.initialState();
+  } else {
+    return state;
+  }
 }

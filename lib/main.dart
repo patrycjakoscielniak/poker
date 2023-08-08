@@ -2,16 +2,20 @@ import 'package:flutter/material.dart';
 import 'package:poker/state/store.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:redux/redux.dart';
+import 'pages/start_page.dart';
 
 void main() {
-  runApp(MyApp());
+  runApp(MyApp(
+    store: Store(reducer, initialState: AppState.initialState()),
+  ));
 }
 
 class MyApp extends StatelessWidget {
-  MyApp({
+  final Store<AppState> store;
+  const MyApp({
     super.key,
+    required this.store,
   });
-  final store = Store(reducer, initialState: AppState.initialState());
 
   @override
   Widget build(BuildContext context) {
@@ -21,27 +25,7 @@ class MyApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
       ),
-      home: HomePage(),
-    );
-  }
-}
-
-class HomePage extends StatelessWidget {
-  const HomePage({
-    super.key,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: const Color.fromARGB(255, 49, 102, 51),
-      body: Center(
-          child: ElevatedButton(
-              onPressed: () {},
-              child: const Text(
-                'Start Game',
-                style: TextStyle(color: Colors.black),
-              ))),
+      home: const StartPage(),
     );
   }
 }

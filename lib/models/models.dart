@@ -1,3 +1,6 @@
+import 'package:flutter/material.dart';
+import 'package:poker/constants.dart';
+
 enum CardSuit {
   spades,
   hearts,
@@ -21,25 +24,29 @@ enum CardType {
   ace
 }
 
-class Card {
+class PlayingCard {
   CardSuit cardSuit;
   CardType cardType;
+  Image cardFront;
+  Image cardBack = backOfACard;
   bool faceUp;
 
-  Card({
+  PlayingCard({
     required this.cardSuit,
     required this.cardType,
     this.faceUp = false,
+    required this.cardFront,
+    required this.cardBack,
   });
 }
 
 class Deck {
-  List<Card> allCards;
+  List<PlayingCard> allCards;
   Deck({required this.allCards});
 }
 
 class Hand {
-  List<Card> hand;
+  List<PlayingCard> hand;
 
   Hand({
     required this.hand,

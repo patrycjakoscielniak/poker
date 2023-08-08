@@ -2,7 +2,7 @@ import 'dart:math';
 
 import 'models/models.dart';
 
-int calculateScore(List<Card> hand) {
+int calculateScore(List<PlayingCard> hand) {
   int score = 0;
   int highCard = 0;
   int highPair = 0;
@@ -111,7 +111,7 @@ int calculateScore(List<Card> hand) {
       highCard = hand[4].cardType.index;
     }
     score = 200 + highPair * 10 + highCard;
-    //HIGH CARD
+    //HIGH PlayingCard
   } else {
     highCard = hand[4].cardType.index;
     score = highCard * 10;
