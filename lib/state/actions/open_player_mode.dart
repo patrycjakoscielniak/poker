@@ -13,7 +13,7 @@ class OpenPlayer1Mode {
 class OpenPlayer2Mode {
   final Player _player2;
 
-  Player get player1 => _player2;
+  Player get player2 => _player2;
 
   OpenPlayer2Mode(
     this._player2,

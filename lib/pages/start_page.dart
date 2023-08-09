@@ -2,25 +2,23 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
-import 'package:poker/state/actions/open_player_mode.dart';
-import 'package:poker/state/actions/play_again.dart';
-import 'package:poker/state/actions/show_results.dart';
+import 'package:redux/redux.dart';
 
 import '../constants.dart';
 import '../methods.dart';
 import '../models/models.dart';
 import '../state/actions/deal_cards.dart';
 import '../state/store.dart';
+import 'game_table.dart';
 
 class StartPage extends StatelessWidget {
-  const StartPage({
-    super.key,
-  });
+  final Store<AppState> store;
+  const StartPage({super.key, required this.store});
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color.fromARGB(255, 49, 102, 51),
+      backgroundColor: tableColor,
       body: Center(
           child: Stack(alignment: Alignment.center, children: [
         Image.asset(
@@ -29,11 +27,11 @@ class StartPage extends StatelessWidget {
         ),
         ElevatedButton(
             onPressed: () {
-              Deck deck = Deck(allCards: []);
-              Player player1;
-              Player player2;
-              Hand hand1 = Hand(hand: []);
-              Hand hand2 = Hand(hand: []);
+              Deck deck = store.state.deck;
+              Player player1 = store.state.player1;
+              Player player2 = store.state.player2;
+              Hand hand1 = store.state.hand1;
+              Hand hand2 = store.state.hand2;
               int score1 = 0;
               int score2 = 0;
 
@@ -42,7 +40,10 @@ class StartPage extends StatelessWidget {
                   deck.allCards.add(PlayingCard(
                       cardSuit: suit,
                       cardType: type,
-                      cardFront: Image.asset('images/cards/$suit/$type.png'),
+                      cardFront: Image.asset(
+                        'images/cards/${suit.name}_${type.name}.png',
+                        width: 100,
+                      ),
                       cardBack: backOfACard));
                   deck.allCards.shuffle();
                 }
@@ -87,9 +88,37 @@ class StartPage extends StatelessWidget {
               score1 = calculateScore(hand1.hand);
               score2 = calculateScore(hand2.hand);
 
+              final pokerHand = Hand(hand: [
+                PlayingCard(
+                    cardSuit: CardSuit.clubs,
+                    cardType: CardType.ten,
+                    cardFront: Image.asset('images/cards/clubs_ten.png'),
+                    cardBack: backOfACard),
+                PlayingCard(
+                    cardSuit: CardSuit.clubs,
+                    cardType: CardType.jack,
+                    cardFront: Image.asset('images/cards/clubs_jack.png'),
+                    cardBack: backOfACard),
+                PlayingCard(
+                    cardSuit: CardSuit.clubs,
+                    cardType: CardType.queen,
+                    cardFront: Image.asset('images/cards/clubs_queen.png'),
+                    cardBack: backOfACard),
+                PlayingCard(
+                    cardSuit: CardSuit.clubs,
+                    cardType: CardType.king,
+                    cardFront: Image.asset('images/cards/clubs_king.png'),
+                    cardBack: backOfACard),
+                PlayingCard(
+                    cardSuit: CardSuit.clubs,
+                    cardType: CardType.ace,
+                    cardFront: Image.asset('images/cards/clubs_ace.png'),
+                    cardBack: backOfACard)
+              ]);
+
               player1 = Player(
                   name: 'Player 1',
-                  hand: hand1,
+                  hand: pokerHand,
                   score: score1,
                   showCards: false);
               player2 = Player(
@@ -98,10 +127,12 @@ class StartPage extends StatelessWidget {
                   score: score2,
                   showCards: false);
 
-              // StoreProvider.of<AppState>(context)
-              //     .dispatch(DealCards(deck, hand1, hand2, player1, player2));
+              StoreProvider.of<AppState>(context).dispatch(
+                  DealCards(deck, pokerHand, hand2, player1, player2));
               Navigator.of(context).push(MaterialPageRoute(
-                  builder: (context) => GameTableAfterDeal()));
+                  builder: (context) => GameTableAfterDeal(
+                        store: store,
+                      )));
             },
             child: const Text(
               'Start Game',
@@ -109,134 +140,5 @@ class StartPage extends StatelessWidget {
             )),
       ])),
     );
-  }
-}
-
-class GameTableAfterDeal extends StatelessWidget {
-  GameTableAfterDeal({
-    super.key,
-  });
-
-  int selectedIndex = 1;
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: const Color.fromARGB(255, 49, 102, 51),
-
-      // bottomNavigationBar: BottomNavigationBar(items: const [
-      //   BottomNavigationBarItem(
-      //       icon: Icon(Icons.military_tech), label: 'Show Winner'),
-      //   BottomNavigationBarItem(icon: Icon(Icons.style), label: 'Play'),
-      //   BottomNavigationBarItem(icon: Icon(Icons.autorenew), label: 'Restart')
-      // ]),
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Stack(children: [
-              Stack(
-                alignment: Alignment.center,
-                children: [
-                  Image.asset(
-                    'images/cards/back.png',
-                    width: 100,
-                  )
-                ],
-              ),
-              ElevatedButton(
-                  onPressed: () {
-                    // Player player1 = Player(
-                    //     name: 'Player 1',
-                    //     hand: state.hand1,
-                    //     score: calculateScore(state.hand1.hand),
-                    //     showCards: true);
-                    // StoreProvider.of<AppState>(context)
-                    //     .dispatch(OpenPlayer1Mode(
-                    //   player1),
-                    // ));
-                    Navigator.of(context).push(MaterialPageRoute(
-                        builder: (context) => const PlayerMode()));
-                  },
-                  child: const Text('Player 1')),
-            ]),
-            const SizedBox(height: 100),
-            Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [
-              IconButton(
-                  onPressed: () {
-                    // Player player1 = Player(
-                    //     name: 'Player 1',
-                    //     hand: state.hand1,
-                    //     score: calculateScore(state.hand1.hand),
-                    //     showCards: true);
-
-                    // Player player2 = Player(
-                    //   name: 'Player 2',
-                    //   hand: state.hand2,
-                    //   score: calculateScore(state.hand2.hand),
-                    //   showCards: true,
-                    // );
-                    // StoreProvider.of<AppState>(context)
-                    //     .dispatch(ShowResults(player1, player2));
-                  },
-                  icon: const Icon(Icons.military_tech)),
-              Image.asset(
-                'images/cards/deck.png',
-                width: 170,
-              ),
-              IconButton(
-                  onPressed: () {
-                    // Deck deck = AppState.initialState().deck;
-                    // Hand hand1 = AppState.initialState().hand1;
-                    // Hand hand2 = AppState.initialState().hand2;
-                    // Player player1 = AppState.initialState().player1;
-                    // Player player2 = AppState.initialState().player2;
-                    // StoreProvider.of<AppState>(context).dispatch(
-                    //     PlayAgain(deck, hand1, hand2, player1, player2));
-                  },
-                  icon: const Icon(Icons.autorenew)),
-            ]),
-            const SizedBox(height: 100),
-            Stack(children: [
-              Stack(
-                alignment: Alignment.center,
-                children: [
-                  Image.asset(
-                    'images/cards/back.png',
-                    width: 100,
-                  )
-                ],
-              ),
-              ElevatedButton(
-                  onPressed: () {
-                    // Player player2 = Player(
-                    //     name: 'Player 2',
-                    //     hand: state.hand2,
-                    //     score: calculateScore(state.hand2.hand),
-                    //     showCards: true);
-                    // StoreProvider.of<AppState>(context)
-                    //     .dispatch(OpenPlayer2Mode(
-                    //   player2),
-                    // ));
-                    Navigator.of(context).push(MaterialPageRoute(
-                        builder: (context) => const PlayerMode()));
-                  },
-                  child: const Text('Player 1')),
-            ]),
-          ],
-        ),
-      ),
-    );
-  }
-}
-
-class PlayerMode extends StatelessWidget {
-  const PlayerMode({
-    super.key,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return const Scaffold(body: Center(child: Text('Player Mode')));
   }
 }

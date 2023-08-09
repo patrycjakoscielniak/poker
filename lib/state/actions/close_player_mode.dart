@@ -13,7 +13,7 @@ class ClosePlayer1Mode {
 class ClosePlayer2Mode {
   final Player _player2;
 
-  Player get player1 => _player2;
+  Player get player2 => _player2;
 
   ClosePlayer2Mode(
     this._player2,

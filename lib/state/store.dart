@@ -39,17 +39,6 @@ class AppState {
         );
 }
 
-enum Action {
-  dealCards,
-  openPlayer1Mode,
-  openPlayer2Mode,
-  closePlayer1Mode,
-  closePlayer2Mode,
-  exchangeCards,
-  showResults,
-  playAgain,
-}
-
 AppState reducer(AppState state, action) {
   if (action is DealCards || action is ExchangeCards) {
     return AppState(action.deck, action.hand1, action.hand2, action.player1,
