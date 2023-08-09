@@ -5,7 +5,6 @@ import 'package:flutter_redux/flutter_redux.dart';
 import 'package:poker/constants.dart';
 import 'package:poker/pages/results_page.dart';
 import 'package:poker/pages/start_page.dart';
-import 'package:poker/state/actions/open_player_mode.dart';
 import 'package:poker/state/actions/play_again.dart';
 import 'package:poker/state/actions/show_results.dart';
 import 'package:poker/state/store.dart';
@@ -13,8 +12,7 @@ import 'package:redux/redux.dart';
 
 import '../methods.dart';
 import '../models/models.dart';
-import 'player1_mode.dart';
-import 'player2_mode.dart';
+import 'player_mode.dart';
 
 class GameTableAfterDeal extends StatelessWidget {
   Store<AppState> store;
@@ -46,16 +44,14 @@ class GameTableAfterDeal extends StatelessWidget {
               ElevatedButton(
                   onPressed: () {
                     Player player1 = Player(
-                        name: 'Player 1',
-                        hand: store.state.hand1,
-                        score: calculateScore(store.state.hand1.hand),
-                        showCards: true);
-                    StoreProvider.of<AppState>(context)
-                        .dispatch(OpenPlayer1Mode(player1));
-
+                      name: 'Player 1',
+                      hand: store.state.hand1,
+                      score: calculateScore(store.state.hand1.hand),
+                    );
                     Navigator.of(context).push(MaterialPageRoute(
-                        builder: (context) => Player1Mode(
+                        builder: (context) => PlayerMode(
                               store: store,
+                              player: player1,
                             )));
                   },
                   child: const Text('Player 1')),
@@ -65,15 +61,14 @@ class GameTableAfterDeal extends StatelessWidget {
               IconButton(
                   onPressed: () {
                     Player player1 = Player(
-                        name: 'Player 1',
-                        hand: store.state.hand1,
-                        score: calculateScore(store.state.hand1.hand),
-                        showCards: true);
+                      name: 'Player 1',
+                      hand: store.state.hand1,
+                      score: calculateScore(store.state.hand1.hand),
+                    );
                     Player player2 = Player(
                       name: 'Player 2',
                       hand: store.state.hand2,
                       score: calculateScore(store.state.hand2.hand),
-                      showCards: true,
                     );
                     StoreProvider.of<AppState>(context)
                         .dispatch(ShowResults(player1, player2));
@@ -114,17 +109,14 @@ class GameTableAfterDeal extends StatelessWidget {
               ElevatedButton(
                   onPressed: () {
                     Player player2 = Player(
-                        name: 'Player 2',
-                        hand: store.state.hand2,
-                        score: calculateScore(store.state.hand2.hand),
-                        showCards: true);
-                    StoreProvider.of<AppState>(context).dispatch(
-                      OpenPlayer2Mode(player2),
+                      name: 'Player 2',
+                      hand: store.state.hand2,
+                      score: calculateScore(store.state.hand2.hand),
                     );
-
                     Navigator.of(context).push(MaterialPageRoute(
-                        builder: (context) => Player2Mode(
+                        builder: (context) => PlayerMode(
                               store: store,
+                              player: player2,
                             )));
                   },
                   child: const Text('Player 2')),

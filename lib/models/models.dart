@@ -57,10 +57,10 @@ class Player {
   String name;
   Hand hand;
   int score;
-  bool showCards;
+  
   Player(
       {required this.name,
       required this.hand,
       required this.score,
-      required this.showCards});
+      });
 }

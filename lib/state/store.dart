@@ -1,7 +1,5 @@
-import 'package:poker/state/actions/close_player_mode.dart';
 import 'package:poker/state/actions/deal_cards.dart';
 import 'package:poker/state/actions/exchange_cards.dart';
-import 'package:poker/state/actions/open_player_mode.dart';
 import 'package:poker/state/actions/play_again.dart';
 import 'package:poker/state/actions/show_results.dart';
 import '../models/models.dart';
@@ -29,13 +27,11 @@ class AppState {
           name: 'Player 1',
           hand: Hand(hand: []),
           score: 0,
-          showCards: false,
         ),
         _player2 = Player(
           name: 'Player 2',
           hand: Hand(hand: []),
           score: 0,
-          showCards: false,
         );
 }
 
@@ -43,14 +39,6 @@ AppState reducer(AppState state, action) {
   if (action is DealCards || action is ExchangeCards) {
     return AppState(action.deck, action.hand1, action.hand2, action.player1,
         action.player2);
-  }
-  if (action is OpenPlayer1Mode || action is ClosePlayer1Mode) {
-    return AppState(
-        state.deck, state.hand1, state.hand2, action.player1, state.player2);
-  }
-  if (action is OpenPlayer2Mode || action is ClosePlayer2Mode) {
-    return AppState(
-        state.deck, state.hand1, state.hand2, state.player1, action.player2);
   }
   if (action is ShowResults) {
     return AppState(

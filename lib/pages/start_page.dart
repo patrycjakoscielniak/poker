@@ -49,13 +49,15 @@ class StartPage extends StatelessWidget {
                 }
               }
 
-              int randomNumber = Random().nextInt(deck.allCards.length);
               for (int i = 0; i < 5; i++) {
-                hand1.hand.add(deck.allCards[randomNumber]);
-                deck.allCards.remove(hand1.hand[i]);
+                int randomNumber = Random().nextInt(deck.allCards.length);
+                PlayingCard randomCard = deck.allCards[randomNumber];
+                hand1.hand.add(randomCard);
+                deck.allCards.remove(randomCard);
               }
               hand1.hand.sort(
                   ((a, b) => a.cardType.index.compareTo(b.cardType.index)));
+              int randomNumber = Random().nextInt(5);
               if (hand1.hand == heartsPoker.hand) {
                 deck.allCards.remove(spadesPoker.hand.elementAt(randomNumber));
                 deck.allCards
@@ -80,55 +82,29 @@ class StartPage extends StatelessWidget {
                 deck.allCards.remove(heartsPoker.hand.elementAt(randomNumber));
               }
               for (int i = 0; i < 5; i++) {
-                hand2.hand.add(deck.allCards[randomNumber]);
-                deck.allCards.remove(hand2.hand[i]);
+                int randomNumber = Random().nextInt(deck.allCards.length);
+                PlayingCard randomCard = deck.allCards[randomNumber];
+                hand2.hand.add(randomCard);
+                deck.allCards.remove(randomCard);
               }
               hand2.hand.sort(
                   ((a, b) => a.cardType.index.compareTo(b.cardType.index)));
               score1 = calculateScore(hand1.hand);
               score2 = calculateScore(hand2.hand);
 
-              final pokerHand = Hand(hand: [
-                PlayingCard(
-                    cardSuit: CardSuit.clubs,
-                    cardType: CardType.ten,
-                    cardFront: Image.asset('images/cards/clubs_ten.png'),
-                    cardBack: backOfACard),
-                PlayingCard(
-                    cardSuit: CardSuit.clubs,
-                    cardType: CardType.jack,
-                    cardFront: Image.asset('images/cards/clubs_jack.png'),
-                    cardBack: backOfACard),
-                PlayingCard(
-                    cardSuit: CardSuit.clubs,
-                    cardType: CardType.queen,
-                    cardFront: Image.asset('images/cards/clubs_queen.png'),
-                    cardBack: backOfACard),
-                PlayingCard(
-                    cardSuit: CardSuit.clubs,
-                    cardType: CardType.king,
-                    cardFront: Image.asset('images/cards/clubs_king.png'),
-                    cardBack: backOfACard),
-                PlayingCard(
-                    cardSuit: CardSuit.clubs,
-                    cardType: CardType.ace,
-                    cardFront: Image.asset('images/cards/clubs_ace.png'),
-                    cardBack: backOfACard)
-              ]);
-
               player1 = Player(
-                  name: 'Player 1',
-                  hand: pokerHand,
-                  score: score1,
-                  showCards: false);
+                name: 'Player 1',
+                hand: hand1,
+                score: score1,
+              );
               player2 = Player(
-                  name: 'Player 2',
-                  hand: hand2,
-                  score: score2,
-                  showCards: false);
+                name: 'Player 2',
+                hand: hand2,
+                score: score2,
+              );
 
-              StoreProvider.of<AppState>(context).dispatch(
-                  DealCards(deck, pokerHand, hand2, player1, player2));
+              StoreProvider.of<AppState>(context)
+                  .dispatch(DealCards(deck, hand1, hand2, player1, player2));
               Navigator.of(context).push(MaterialPageRoute(
                   builder: (context) => GameTableAfterDeal(
                         store: store,

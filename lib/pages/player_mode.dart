@@ -7,34 +7,35 @@ import 'package:flutter_redux/flutter_redux.dart';
 import 'package:poker/constants.dart';
 import 'package:poker/methods.dart';
 import 'package:poker/models/models.dart';
-import 'package:poker/state/actions/close_player_mode.dart';
 import 'package:poker/state/actions/exchange_cards.dart';
 import 'package:redux/redux.dart';
 
 import '../state/store.dart';
 
-class Player2Mode extends StatefulWidget {
+class PlayerMode extends StatefulWidget {
   Store<AppState> store;
-  Player2Mode({
+  Player player;
+  PlayerMode({
     super.key,
     required this.store,
+    required this.player,
   });
 
   @override
-  State<Player2Mode> createState() => _Player2ModeState();
+  State<PlayerMode> createState() => _PlayerModeState();
 }
 
-class _Player2ModeState extends State<Player2Mode> {
+class _PlayerModeState extends State<PlayerMode> {
   @override
   Widget build(BuildContext context) {
     List<PlayingCard> selectedCards = [];
-    List<PlayingCard> playersCards = widget.store.state.hand2.hand;
+    List<PlayingCard> playersCards = widget.player.hand.hand;
     PlayingCard card1 = playersCards[0];
     PlayingCard card2 = playersCards[1];
     PlayingCard card3 = playersCards[2];
     PlayingCard card4 = playersCards[3];
     PlayingCard card5 = playersCards[4];
-
+    bool isButtonDisabled = false;
     return Scaffold(
       backgroundColor: tableColor,
       body: Center(
@@ -55,7 +56,6 @@ class _Player2ModeState extends State<Player2Mode> {
               ],
             ),
             const SizedBox(height: 20),
-            Text('Score: ${widget.store.state.player2.score}'),
             IconButton(
                 onPressed: () {
                   List<PlayingCard> hand = playersCards;
@@ -63,49 +63,62 @@ class _Player2ModeState extends State<Player2Mode> {
                   int randomNumber = Random().nextInt(deck.allCards.length);
                   if (selectedCards.contains(card1)) {
                     hand.remove(card1);
-
                     hand.add(deck.allCards[randomNumber]);
                     deck.allCards.removeAt(randomNumber);
                     deck.allCards.add(card1);
+                    deck.allCards.shuffle();
                   }
                   if (selectedCards.contains(card2)) {
                     hand.remove(card2);
                     hand.add(deck.allCards[randomNumber]);
                     deck.allCards.removeAt(randomNumber);
-                    deck.allCards.add(card1);
+                    deck.allCards.add(card2);
+                    deck.allCards.shuffle();
                   }
                   if (selectedCards.contains(card3)) {
                     hand.remove(card3);
                     hand.add(deck.allCards[randomNumber]);
                     deck.allCards.removeAt(randomNumber);
-                    deck.allCards.add(card1);
+                    deck.allCards.add(card3);
+                    deck.allCards.shuffle();
                   }
                   if (selectedCards.contains(card4)) {
                     hand.remove(card4);
                     hand.add(deck.allCards[randomNumber]);
                     deck.allCards.removeAt(randomNumber);
-                    deck.allCards.add(card1);
+                    deck.allCards.add(card4);
+                    deck.allCards.shuffle();
                   }
                   if (selectedCards.contains(card5)) {
                     hand.remove(card5);
                     hand.add(deck.allCards[randomNumber]);
                     deck.allCards.removeAt(randomNumber);
-                    deck.allCards.add(card1);
+                    deck.allCards.add(card5);
+                    deck.allCards.shuffle();
                   }
                   hand.sort(
                       ((a, b) => a.cardType.index.compareTo(b.cardType.index)));
-                  Player player2 = Player(
-                      name: 'Player 2',
-                      hand: Hand(hand: hand),
-                      score: calculateScore(hand),
-                      showCards: true);
+                  Player player = Player(
+                    name: widget.player.name,
+                    hand: Hand(hand: hand),
+                    score: calculateScore(hand),
+                  );
+                  if (widget.player.name == widget.store.state.player2.name) {
+                    StoreProvider.of<AppState>(context).dispatch(ExchangeCards(
+                        deck,
+                        widget.store.state.hand1,
+                        Hand(hand: hand),
+                        widget.store.state.player1,
+                        player));
+                  } else {
+                    StoreProvider.of<AppState>(context).dispatch(ExchangeCards(
+                        deck,
+                        Hand(hand: hand),
+                        widget.store.state.hand2,
+                        player,
+                        widget.store.state.player2));
+                  }
 
-                  StoreProvider.of<AppState>(context).dispatch(ExchangeCards(
-                      deck,
-                      widget.store.state.hand1,
-                      Hand(hand: hand),
-                      widget.store.state.player1,
-                      player2));
                   setState(() {});
                 },
                 icon: const Icon(Icons.autorenew))
@@ -117,13 +130,6 @@ class _Player2ModeState extends State<Player2Mode> {
         children: [
           TextButton(
               onPressed: () {
-                final player = Player(
-                    name: 'Player 2',
-                    hand: widget.store.state.hand2,
-                    score: widget.store.state.player2.score,
-                    showCards: false);
-                StoreProvider.of<AppState>(context)
-                    .dispatch(ClosePlayer2Mode(player));
                 Navigator.of(context).pop();
               },
               child: const Row(
