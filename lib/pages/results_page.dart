@@ -2,7 +2,7 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
-import 'package:poker/constants.dart';
+import 'package:poker/variables/constants.dart';
 import 'package:poker/methods/explain_result.dart';
 import 'package:poker/methods/get_hand_name.dart';
 import 'package:poker/pages/start_page.dart';

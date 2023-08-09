@@ -4,7 +4,7 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
-import 'package:poker/constants.dart';
+import 'package:poker/variables/constants.dart';
 import 'package:poker/methods/calculate_score.dart';
 import 'package:poker/models/models.dart';
 import 'package:poker/state/actions/exchange_cards.dart';

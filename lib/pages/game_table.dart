@@ -2,7 +2,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
-import 'package:poker/constants.dart';
+import 'package:poker/variables/constants.dart';
 import 'package:poker/pages/results_page.dart';
 import 'package:poker/pages/start_page.dart';
 import 'package:poker/state/actions/play_again.dart';

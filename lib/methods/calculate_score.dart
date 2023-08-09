@@ -19,6 +19,7 @@ int calculateScore(List<PlayingCard> hand) {
         cardTypes.contains(CardType.ace) &&
         cardSuits.toSet().length == 1) {
       score = 1500;
+      //HIGH CARD
     } else {
       highCard = hand[4].cardType.index + 2;
       score = highCard * 10;

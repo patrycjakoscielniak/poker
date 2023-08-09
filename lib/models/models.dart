@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:poker/constants.dart';
+import 'package:poker/variables/constants.dart';
 
 enum CardSuit {
   spades,
@@ -57,10 +57,10 @@ class Player {
   String name;
   Hand hand;
   int score;
-  
-  Player(
-      {required this.name,
-      required this.hand,
-      required this.score,
-      });
+
+  Player({
+    required this.name,
+    required this.hand,
+    required this.score,
+  });
 }

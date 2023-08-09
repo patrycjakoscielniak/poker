@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import 'models/models.dart';
+import '../models/models.dart';
 
 final backOfACard = Image.asset('images/cards/back.png');
 const tableColor = Color.fromARGB(255, 49, 102, 51);
