@@ -1,4 +1,4 @@
-import 'models/models.dart';
+import '../models/models.dart';
 
 int calculateScore(List<PlayingCard> hand) {
   int score = 0;

@@ -5,7 +5,7 @@ import 'package:flutter_redux/flutter_redux.dart';
 import 'package:redux/redux.dart';
 
 import '../constants.dart';
-import '../methods.dart';
+import '../methods/calculate_score.dart';
 import '../models/models.dart';
 import '../state/actions/deal_cards.dart';
 import '../state/store.dart';

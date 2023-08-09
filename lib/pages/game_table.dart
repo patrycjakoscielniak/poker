@@ -10,7 +10,7 @@ import 'package:poker/state/actions/show_results.dart';
 import 'package:poker/state/store.dart';
 import 'package:redux/redux.dart';
 
-import '../methods.dart';
+import '../methods/calculate_score.dart';
 import '../models/models.dart';
 import 'player_mode.dart';
 

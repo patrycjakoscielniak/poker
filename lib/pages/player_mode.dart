@@ -5,7 +5,7 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:poker/constants.dart';
-import 'package:poker/methods.dart';
+import 'package:poker/methods/calculate_score.dart';
 import 'package:poker/models/models.dart';
 import 'package:poker/state/actions/exchange_cards.dart';
 import 'package:redux/redux.dart';
@@ -35,7 +35,6 @@ class _PlayerModeState extends State<PlayerMode> {
     PlayingCard card3 = playersCards[2];
     PlayingCard card4 = playersCards[3];
     PlayingCard card5 = playersCards[4];
-    bool isButtonDisabled = false;
     return Scaffold(
       backgroundColor: tableColor,
       body: Center(
