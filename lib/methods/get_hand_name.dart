@@ -19,7 +19,7 @@ String getHandName(int score) {
     handName = 'Pair';
   }
   if (score < 200) {
-    handName = 'High card';
+    handName = 'High Card';
   }
   return handName;
 }
